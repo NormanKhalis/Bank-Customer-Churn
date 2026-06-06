@@ -128,7 +128,7 @@ scikit-learn
 xgboost
 plotly
 openpyxl
-jupyter
+google colab
 ```
 
 ---
