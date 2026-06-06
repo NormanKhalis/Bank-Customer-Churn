@@ -179,6 +179,6 @@ bank-customer-churn/
 
 ## 👤 Author
 
-Made by **[Your Name]**
-- GitHub: [@your-username](https://github.com/your-username)
-- LinkedIn: [your-linkedin](https://linkedin.com/in/your-linkedin)
+Made by **[Norman Khalis]**
+- GitHub: [@NormanKhalis]([https://github.com/your-username](https://github.com/NormanKhalis))
+- LinkedIn: [NormanKhalis](www.linkedin.com/in/normankhalis)
