@@ -84,29 +84,30 @@ Customer churn is one of the most costly problems in banking. This project uses 
 
 ## 🤖 Module 2 — Churn Prediction 
 
-File: 2_churn_prediction/churn_prediction.py
-Steps covered:
 
-Step 1: Load & inspect data
-Step 2: Preprocessing (drop irrelevant columns, encode categoricals, train/test split 80/20, feature scaling)
-Step 3: Train 3 classifiers — Logistic Regression, Random Forest, XGBoost
-Step 4: Evaluate models (Accuracy, AUC-ROC, Confusion Matrix, Classification Report)
-Step 5: Visualizations (Confusion Matrices, ROC Curves, Model Comparison, Feature Importance)
-Step 6: Final summary & best model selection
+**File:** `2_churn_prediction/churn_prediction.py`
 
-📈 Model Performance
-ModelAccuracyAUC-ROCChurned PrecisionChurned RecallLogistic Regression80.50%0.77100.590.14Random Forest86.40%0.84640.780.46XGBoost ✅86.50%0.85600.770.48
-🏆 Best Model: XGBoost
-🔍 Key Findings
-Model comparison:
-FindingDetailXGBoost winsHighest AUC-ROC (0.8560) and Accuracy (86.50%)Logistic Regression strugglesRecall of only 14% — misses most actual churnersRandom Forest vs XGBoostNearly identical accuracy, XGBoost slightly better at separating churners
-Feature Importance — what drives churn prediction:
-RankRandom ForestXGBoost1Age (23.9%)NumOfProducts (29.7%)2EstimatedSalary (14.7%)IsActiveMember (22.3%)3CreditScore (14.4%)Age (17.4%)4Balance (14.1%)Geography (7.8%)5NumOfProducts (12.9%)Balance (5.7%)
-Weakest predictors: HasCrCard and Gender — lowest importance scores across both models.
-Confusion Matrix highlight (XGBoost on 2,000 test samples):
+**Steps covered:**
+- Step 1: Load data
+- Step 2: Preprocessing (drop irrelevant columns, encode categoricals, train/test split 80/20, feature scaling)
+- Step 3: Train 3 classifiers — Logistic Regression, Random Forest, XGBoost
+- Step 4: Evaluate models (Accuracy, AUC-ROC, Confusion Matrix, Classification Report)
+- Step 5: Visualizations (Confusion Matrices, ROC Curves, Model Comparison, Feature Importance)
+- Step 6: Final summary & best model selection
 
-Correctly identified churners (TP): 196
-Churners missed (FN): 211 — still room to improve with class balancing techniques like SMOTE
+### 🔍 Key Findings
+
+**Model performance:**
+
+| Model | Accuracy | AUC-ROC | Churned Recall |
+|---|---|---|---|
+| Logistic Regression | 80.50% | 0.7710 | 0.14 |
+| Random Forest | 86.40% | 0.8464 | 0.46 |
+| XGBoost | 86.50% | 0.8560 | 0.48 |
+
+**Top features by importance (XGBoost):** NumOfProducts (29.7%), IsActiveMember (22.3%), Age (17.4%) — consistent with EDA findings.
+
+**Best model: XGBoost** — highest AUC-ROC (0.8560) and accuracy (86.50%).
 
 ---
 
