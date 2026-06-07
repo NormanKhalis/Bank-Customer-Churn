@@ -45,7 +45,7 @@ Customer churn is one of the most costly problems in banking. This project uses 
 |---|---|---|
 | 1 | Exploratory Data Analysis | ✅ Complete |
 | 2 | Churn Prediction (ML) | ✅ Complete |
-| 3 | Customer Segmentation | 🔄 In Progress |
+| 3 | Customer Segmentation | ✅ Complete |
 | 4 | Visualization & Dashboard | 🔄 In Progress |
 | 5 | Business Insights Report | 🔄 In Progress |
 
