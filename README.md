@@ -111,12 +111,166 @@ Customer churn is one of the most costly problems in banking. This project uses 
 
 ---
 
-## 🔵 Module 3 — Customer Segmentation *(Coming Soon)*
+## 🔵 Module 3 — Customer Segmentation
 
-Planned approach:
-- K-Means Clustering
-- Segment profiling (high-risk vs loyal vs dormant)
-- Retention strategy recommendations per segment
+## 📊 Dataset
+
+**File:** `churn_bank_customers.xlsx`  
+**Rows:** 10,000 customers &nbsp;|&nbsp; **Columns:** 14
+
+| Column | Type | Description |
+|---|---|---|
+| `CustomerId` | int | Unique customer identifier |
+| `Surname` | str | Customer surname |
+| `CreditScore` | int | Credit score (350–850) |
+| `Geography` | str | Country: France, Germany, Spain |
+| `Gender` | str | Male / Female |
+| `Age` | int | Customer age |
+| `Tenure` | int | Years with the bank (0–10) |
+| `Balance` | float | Account balance |
+| `NumOfProducts` | int | Number of bank products held (1–4) |
+| `HasCrCard` | int | Has credit card: 1 = Yes, 0 = No |
+| `IsActiveMember` | int | Active member: 1 = Yes, 0 = No |
+| `EstimatedSalary` | float | Annual estimated salary |
+| `Exited` | int | **Target** — churned: 1 = Yes, 0 = No |
+
+---
+
+## 🔬 Methodology
+
+### Step 1 — Exploratory Data Analysis
+- Overall churn rate: **20.4%**
+- Key churn drivers identified before clustering:
+
+| Factor | Churn Rate |
+|---|---|
+| NumOfProducts = 1 | 27.7% |
+| NumOfProducts = 2 | 7.6% |
+| NumOfProducts = 3 | 82.7% |
+| NumOfProducts = 4 | 100.0% |
+| IsActiveMember = 0 | 26.9% |
+| IsActiveMember = 1 | 14.3% |
+
+### Step 2 — Feature Engineering
+- Encoded `Gender` → `Gender_enc` (Male = 1)
+- Encoded `Geography` → `Geo_Germany`, `Geo_Spain` (one-hot)
+- **11 features used for clustering** (`Exited` excluded to avoid data leakage)
+- All features standardised with `StandardScaler`
+
+### Step 3 — K-Means Clustering
+- Elbow method tested k = 2 through 9
+- **k = 4 selected** — clear inflection point in the inertia curve
+
+| k | Inertia |
+|---|---|
+| 2 | 97,252 |
+| 3 | 88,349 |
+| **4** | **82,586** ← chosen |
+| 5 | 79,247 |
+| 6 | 76,405 |
+
+### Step 4 — Segment Labelling
+Business-rule labels applied on top of cluster outputs:
+
+| Rule | Segment |
+|---|---|
+| `Balance == 0` | **Dormant** |
+| `IsActiveMember == 0` OR `NumOfProducts >= 3` | **High-Risk** |
+| `IsActiveMember == 1` AND `NumOfProducts == 2` AND `CreditScore >= 650` | **Loyal** |
+| Everything else | **Moderate-Risk** |
+
+### Step 5 — PCA Visualisation
+- 2-component PCA for scatter plot (explains ~25.4% of variance)
+- Used for visual separation confirmation only — not for clustering
+
+---
+
+## 📈 Key Findings
+
+### Segment Overview
+
+| Segment | Count | Share | Churn Rate |
+|---|---|---|---|
+| 🔴 High-Risk | 3,191 | 31.9% | **33.0%** |
+| ⚫ Dormant | 3,617 | 36.2% | 14.0% |
+| 🔵 Moderate-Risk | 2,635 | 26.4% | 16.0% |
+| 🟢 Loyal | 557 | 5.6% | **9.0%** |
+
+### Segment Profiles
+
+| Metric | High-Risk | Dormant | Moderate-Risk | Loyal |
+|---|---|---|---|---|
+| Avg Age | 38.7 | 38.4 | 39.9 | 38.8 |
+| Avg Balance | $120,508 | $0 | $119,119 | $119,282 |
+| Avg Credit Score | 648 | 649 | 638 | **730** |
+| Avg Products | 1.44 | 1.78 | 1.19 | **2.00** |
+| Active Rate | **3%** | 52% | **100%** | **100%** |
+| Avg Salary | $101,675 | $98,984 | $98,802 | $104,293 |
+| Avg Tenure | 5.1 yrs | 5.1 yrs | 4.9 yrs | 4.8 yrs |
+
+### Critical Observations
+
+**1. Inactivity is the strongest churn signal**
+High-Risk customers have only a 3% active member rate, vs 100% for Loyal and Moderate-Risk. When a customer goes inactive, churn probability more than doubles.
+
+**2. Product count is non-linear**
+Customers with 2 products have the lowest churn (7.6%). Customers with 3+ products have catastrophic churn (83–100%), suggesting product overload and poor cross-sell targeting.
+
+**3. Dormant segment is a hidden risk**
+36% of customers hold zero balance despite earning ~$99K on average. They are not actively churning yet, but represent significant revenue leakage — their money is simply held elsewhere.
+
+**4. Loyal segment is tiny but powerful**
+Only 5.6% of customers qualify as Loyal. This group has the highest credit score (730), all hold exactly 2 products, and churn at just 9%. Growing this segment is the highest-ROI retention play.
+
+**5. Tenure does not protect against churn**
+All four segments have similar average tenure (~5 years), meaning long-standing customers are not immune. Engagement and product fit matter more than relationship length.
+
+---
+
+## 🎯 Retention Strategies
+
+### 🔴 High-Risk (n=3,191 | Churn 33%)
+> Inactive members and over-productised customers — act immediately.
+
+1. **Immediate outreach** — personal banker call within 48h for inactive accounts
+2. **Re-engagement offer** — fee waiver or bonus interest rate for 3 months
+3. **Product simplification** — review 3–4 product customers and consolidate to 2 optimal products
+4. **Loyalty incentives** — cashback or points programme to rebuild engagement
+5. **Predictive trigger** — automate alert when `IsActiveMember` flips to 0
+
+---
+
+### ⚫ Dormant (n=3,617 | Churn 14%)
+> Zero-balance customers who earn well but bank elsewhere.
+
+1. **Deposit incentive** — promotional interest rate (e.g. 5% for 6 months) to fund accounts
+2. **Salary crediting campaign** — payroll deposit bonus to create recurring engagement
+3. **Mobile push** — personalised nudges showing savings goals and milestones
+4. **Cross-sell** — entry-level investment product aligned to salary bracket
+5. **Win-back email series** — "Your account is ready when you are"
+
+---
+
+### 🔵 Moderate-Risk (n=2,635 | Churn 16%)
+> Engaged, single-product customers — one step from Loyal.
+
+1. **Product upsell** — introduce a second product (savings account, credit card) to deepen relationship
+2. **Financial health check** — free annual review to build trust and stickiness
+3. **Milestone rewards** — tenure-based perks at 3, 5, and 10-year marks
+4. **Digital engagement** — enrol in budgeting and analytics features in the mobile app
+5. **Referral programme** — reward existing customers for bringing new accounts
+
+---
+
+### 🟢 Loyal (n=557 | Churn 9%)
+> Active, multi-product, high credit-score customers — protect and grow.
+
+1. **VIP programme** — dedicated relationship manager and priority service
+2. **Exclusive rates** — preferential mortgage/loan rates for long-term retention
+3. **Advocacy** — referral bonuses; they are the best brand ambassadors
+4. **Premium upgrade** — offer premium/black card tier with added benefits
+5. **Early access** — beta features, new products, and exclusive events
+
 
 ---
 
