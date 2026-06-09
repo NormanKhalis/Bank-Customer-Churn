@@ -274,13 +274,39 @@ All four segments have similar average tenure (~5 years), meaning long-standing 
 
 ---
 
-## 📈 Module 4 — Visualization & Dashboard *(Coming Soon)*
+## 📈 Module 4 — Visualization & Dashboard 
 
-Planned approach:
-- Interactive churn dashboard
-- Charts by Geography, Age Group, Product Count
-- Built with Matplotlib / Seaborn / Plotly
+> An interactive and static dashboard for exploring churn patterns across geography, age, product usage, and gender.
 
+---
+
+## 📊 Dashboard Preview
+
+| Static Dashboard | Interactive Dashboard |
+|---|---|
+| `churn_dashboard_static.png` | `churn_dashboard_interactive.html` |
+| Matplotlib + Seaborn | Plotly (hover, zoom, filter) |
+
+---
+## 📈 Charts Included
+
+| # | Chart | Library | Insight |
+|---|---|---|---|
+| 1 | Churn Rate by Geography (bar) | Seaborn | Which country churns most? |
+| 2 | Churned Customers by Geography (pie) | Matplotlib | Share of churners per region |
+| 3 | Churn Rate by Age Group (bar + line) | Matplotlib | Peak churn age range |
+| 4 | Churned vs Retained by # Products (grouped bar) | Matplotlib | Product count vs loyalty |
+| 5 | Churn Rate — Gender × Geography (heatmap) | Seaborn | Intersection-level breakdown |
+| 6 | Interactive version of all above | Plotly | Hover tooltips + zoom |
+
+---
+## 🔍 Key Findings
+
+- **Germany** has the highest churn rate (~32%), nearly double France and Spain
+- **Ages 41–50** represent the highest-risk churn segment
+- Customers with **3–4 products** churn at dramatically higher rates than those with 1–2
+- **Female customers in Germany** show the highest combined churn rate across gender and geography
+  
 ---
 
 ## 📝 Module 5 — Business Insights Report *(Coming Soon)*
